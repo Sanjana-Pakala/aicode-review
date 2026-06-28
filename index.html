@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Code Reviewer</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+        }
+
+        textarea {
+            width: 60%;
+            height: 200px;
+        }
+
+        #output {
+            width: 60%;
+            margin: 20px auto;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            text-align: left;
+            background: #f4f4f4;
+            min-height: 150px;
+            overflow-y: auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>AI Code Reviewer</h1>
+
+    <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
+    <br><br>
+
+    <button onclick="reviewCode()">Review Code</button>
+
+    <h2>Result:</h2>
+
+    <div id="output">Your AI review will appear here...</div>
+
+    <script>
+        async function reviewCode() {
+            const code = document.getElementById("codeInput").value;
+
+            document.getElementById("output").innerText = "Loading... ⏳";
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/review", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+
+                const data = await response.json();
+
+                document.getElementById("output").innerText = data.review;
+
+            } catch (error) {
+                document.getElementById("output").innerText =
+                    "cd cd frontendError connecting to backend";
+                console.log(error);
+            }
+        }
+    </script>
+
+</body>
+</html>
